@@ -30,4 +30,23 @@ public class VehiculoController {
         return ResponseEntity.ok(vehiculoGuardado);
     }
 
+    @DeleteMapping("/eliminar")
+    public ResponseEntity<VehiculoEntity> eliminarVehiculo(@RequestBody VehiculoEntity vehiculo) {
+        VehiculoEntity vehiculoEliminado = vehiculoService.eliminarVehiculo(vehiculo);
+        return ResponseEntity.ok(vehiculoEliminado);
+    }
+
+    @DeleteMapping("/eliminar/{patente}")
+    public ResponseEntity<VehiculoEntity> eliminarVehiculoPorId(@PathVariable String patente) {
+        VehiculoEntity vehiculoEliminado = vehiculoService.eliminarVehiculoPorId(patente);
+        return ResponseEntity.ok(vehiculoEliminado);
+    }
+
+    @GetMapping("/buscar/{id}")
+    public ResponseEntity<VehiculoEntity> obtenerVehiculoPorId(@PathVariable String id) {
+        VehiculoEntity vehiculo = vehiculoService.obtenerVehiculoPorId(id);
+        return ResponseEntity.ok(vehiculo);
+    }
+
+
 }
