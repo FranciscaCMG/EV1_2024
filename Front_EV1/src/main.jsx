@@ -13,19 +13,29 @@ const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#357a38',
+      main: '#0288d1',
     },
     secondary: {
-      main: '#00796b',
+      main: '#01579b',
     },
   },
-})
+});
+
+import { BrowserRouter } from 'react-router-dom';
+import { SnackbarProvider } from "notistack";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <App />
+      <BrowserRouter>
+        <SnackbarProvider
+          maxSnack={3}
+          autoHideDuration={3000}
+        >
+          <CssBaseline />
+          <App />
+        </SnackbarProvider>
+      </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>
-)
+);
