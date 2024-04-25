@@ -1,75 +1,66 @@
-import { Paper, Typography, Button } from '@mui/material';
-import styled from '@emotion/styled';
-import { Box } from '@mui/system';
-import Grid from '@mui/material/Grid';
-import VerifiedIcon from '@mui/icons-material/Verified';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import { DataGrid } from '@mui/x-data-grid';
 
+const columns = [
+  { field: 'id', headerName: 'ID', width: 90 },
+  {
+    field: 'firstName',
+    headerName: 'Patente',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'lastName',
+    headerName: 'Marca',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'age',
+    headerName: 'Modelo',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'fullName',
+    headerName: 'Motor',
+    description: 'This column has a value getter and is not sortable.',
+    sortable: false,
+    width: 150,
+    valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
+  },
+];
 
+const rows = [
+  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14 },
+  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31 },
+  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
+  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11 },
+  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
+  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+];
 
 export default function VehiculoCard() {
-
-    const Img = styled("img")({
-        width: 200,
-        height: "100%",
-        objectFit: "cover",
-        objectPosition: "center",
-    }
-
-    )
-
-
-
-    return <Paper
-        sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-            overflow: "hidden",
-            mt: 5,
+  return (
+    <Box sx={{ height: 400, width: '100%' }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 5,
+            },
+          },
         }}
-    >
-
-        <Img
-            src="https://images.emojiterra.com/mozilla/512px/1f697.png"
-            alt="Vehiculo Rojo"
-        />
-        <Box sx={{ flexGrow: 1, display: "grid", gap: 1 }}>
-            <Typography variant='h4'>BBYH69</Typography>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                <Grid item xs={1}>
-                    <VerifiedIcon />
-                </Grid>
-                <Grid item xs={6} sx={{ paddingLeft: '0px !important' }}>
-                    <Typography  > TOYOTA </Typography>
-                </Grid>
-            </Grid>
-
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                <Grid item xs={1}>
-                    < VerifiedIcon />
-                </Grid>
-                <Grid item xs={6} sx={{ paddingLeft: '0px !important' }}>
-                    <Typography variant='body1'>YARIS</Typography>
-                </Grid>
-            </Grid>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                <Grid item xs={1}>
-                    <VerifiedIcon color='primary' />
-                </Grid>
-                <Grid item xs={6} sx={{ paddingLeft: '0px !important' }}>
-                    <Typography variant='body1' > Sedan </Typography>
-                </Grid>
-            </Grid>
-
-            <Button variant="contained" sx={{ margin: 2 }}> Add Card</Button>
-        </Box>
-
-        <Box sx={{ mr: 2 }} component="p">
-            $20.000
-        </Box>
-
-
-
-    </Paper>
-
+        pageSizeOptions={[5]}
+        checkboxSelection
+        disableRowSelectionOnClick
+      />
+    </Box>
+  );
 }

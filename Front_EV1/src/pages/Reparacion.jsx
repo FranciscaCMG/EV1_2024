@@ -176,6 +176,7 @@ export default function Reparacion() {
                             startIcon={<OutboxIcon />}
                             type="submit"
                             variant="contained"
+                            color="success"
 
                             sx={{ mt: 3, mb: 2, marginLeft: 0, marginTop: 6, width: '20rem' }}
                         >
