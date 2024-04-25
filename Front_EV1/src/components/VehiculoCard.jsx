@@ -1,66 +1,125 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
+import { useState, useEffect } from "react";
+import axios from 'axios';
+import { Button } from '@mui/material';
+
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 90 },
   {
-    field: 'firstName',
+    field: 'n_patente',
     headerName: 'Patente',
-    width: 150,
-    editable: true,
+    width: 130,
+    editable: false,
   },
   {
-    field: 'lastName',
+    field: 'marca',
     headerName: 'Marca',
-    width: 150,
-    editable: true,
+    width: 130,
+    editable: false,
   },
   {
-    field: 'age',
+    field: 'modelo',
     headerName: 'Modelo',
-    width: 150,
-    editable: true,
+    width: 130,
+    editable: false,
   },
   {
-    field: 'fullName',
-    headerName: 'Motor',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    width: 150,
-    valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
-  },
-];
+    field: 'tipo_auto',
+    headerName: 'Tipo',
+    editable: false,
+    width: 130,
 
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+  },
+  {
+    field: 'anio_fabricacion',
+    headerName: 'Año',
+    editable: false,
+    width: 130,
+
+  },
+  {
+    field: 'tipo_motor',
+    headerName: 'Motor',
+    editable: false,
+    width: 130,
+
+  },
+  {
+    field: 'n_asientos',
+    headerName: 'Asientos',
+    editable: false,
+    width: 120,
+
+  },
+  {
+    field: 'delete',
+    headerName: 'Delete',
+    sortable: false,
+    width: 110,
+    disableClickEventBubbling: true,
+    renderCell: () => (
+      <div>
+        <Button
+          variant='contained'
+          color="error"
+          
+        >Eliminar</Button>
+      </div>
+    ),
+  },
+
 ];
 
 export default function VehiculoCard() {
+
+  const [data, setData] = useState(null);
+
+
+  const handleSubmit = (e) => {
+    console.log('Hay que eliminar vehiculo');
+  }
+
+  useEffect(() => {
+    axios.get('http://localhost:8090/vehiculo/listar')
+      .then(response => {
+        const newData = response.data.map((item, index) => ({
+          ...item,
+          id: index, // Añade una propiedad `id` a cada fila
+        }));
+        setData(newData);
+      })
+      .catch(error => {
+        alert("No entró a la base de datos");
+      });
+  }, []);
+
+
+
   return (
-    <Box sx={{ height: 400, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
+    <Box sx={{ height: 371, width: '100%' }}>
+      {data ? (
+        <DataGrid
+          rows={data}
+          onCellClick={handleSubmit}
+          columns={columns}
+          
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
             },
-          },
-        }}
-        pageSizeOptions={[5]}
-        checkboxSelection
-        disableRowSelectionOnClick
-      />
+          }}
+          pageSizeOptions={[5]}
+           
+        />
+        
+      ) : (
+        <div>Loading...</div>
+      )}
     </Box>
+
   );
 }

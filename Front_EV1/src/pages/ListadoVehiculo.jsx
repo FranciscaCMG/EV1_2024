@@ -4,7 +4,7 @@ import VehiculoCard from '../components/VehiculoCard';
 export default function ListadoVehiculo() {
     return (
         <div>
-            <h1>Listado de Vehículos</h1>
+            <h1 style={{ textAlign: 'center' }}>Listado de Vehículos</h1>
             <VehiculoCard />
         </div>
     );
