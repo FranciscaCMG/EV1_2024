@@ -1,19 +1,17 @@
 import { Box, Button, Grid, MenuItem, TextField } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
+import OutboxIcon from '@mui/icons-material/Outbox';
 
 
 const tipo = [
+
     {
-        value: 'Todos los tipos',
-        label: 'Todos los tipos',
-    },
-    {
-        value: 'Sedan',
+        value: 'SEDAN',
         label: 'Sedan',
     },
     {
-        value: 'Hatchback',
+        value: 'HATCHBACK',
         label: 'Hatchback',
     },
     {
@@ -21,36 +19,33 @@ const tipo = [
         label: 'SUV',
     },
     {
-        value: 'Pickup',
+        value: 'PICKUP',
         label: 'Pickup',
 
     },
     {
-        value: 'Furgoneta',
+        value: 'FURGONETA',
         label: 'Furgoneta',
     },
 ];
 
 
 const motor = [
+
     {
-        value: 'Todos los tipos',
-        label: 'Todos los tipos',
-    },
-    {
-        value: 'Gasolina',
+        value: 'GASOLINA',
         label: 'Gasolina',
     },
     {
-        value: 'Diesel',
+        value: 'DIESEL',
         label: 'Diésel',
     },
     {
-        value: 'Hibrido',
+        value: 'HIBRIDO',
         label: 'Híbrido',
     },
     {
-        value: 'Electrico',
+        value: 'ELECTRICO',
         label: 'Eléctrico',
 
     },
@@ -108,9 +103,9 @@ export default function Registro() {
             });
             axios.
                 post('http://localhost:8090/vehiculo/guardar', {
-                    n_patente: patente,
-                    marca: marca,
-                    modelo: modelo,
+                    n_patente: patente.toLocaleUpperCase(),
+                    marca: marca.toLocaleUpperCase(),
+                    modelo: modelo.toLocaleUpperCase(),
                     tipo_auto: tipoVehiculo,
                     anio_fabricacion: anio,
                     tipo_motor: motorVehiculo,
@@ -120,9 +115,9 @@ export default function Registro() {
                     console.log(response);
                 })
             console.log(patente, marca, modelo, tipoVehiculo, anio, motorVehiculo, asientos);
-            
+
         }
-        
+
     }
 
     return (
@@ -143,12 +138,12 @@ export default function Registro() {
                 noValidate
                 autoComplete="off"
             >
-                <Grid container spacing={2}>
+                <Grid container spacing={2} >
 
                     <Grid item xs={6}>
                         <h4>Patente</h4>
                         <TextField
-                            
+
                             id="patente"
                             label="Ingrese la patente del vehículo"
                             fullWidth
@@ -200,7 +195,6 @@ export default function Registro() {
                             label="Ingrese el tipo del vehículo"
                             fullWidth
                             error={error.errorTipoVehiculo}
-                            defaultValue="Todos los tipos"
                             helperText={error.errorTipoVehiculo ? helperText : ''}
                             required
                             value={tipoVehiculo}
@@ -237,7 +231,6 @@ export default function Registro() {
                             label="Ingrese el motor del vehículo"
                             fullWidth
                             error={error.errorMotorVehiculo}
-                            defaultValue="Todos los tipos"
                             helperText={error.errorMotorVehiculo ? helperText : ''}
                             required
                             value={motorVehiculo}
@@ -266,11 +259,15 @@ export default function Registro() {
                     </Grid>
 
                 </Grid>
-                <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                >Ingresar Vehículo</Button>
+                <div>
+                    <Button
+                        startIcon={<OutboxIcon />}
+                        type="submit"
+                        variant="contained"
+                        sx={{ mt: 30, mb: 2, width: '20rem', marginTop: '2rem' }}
+                    >Ingresar Vehículo</Button>
+                </div>
+
             </Box>
         </>
     );
