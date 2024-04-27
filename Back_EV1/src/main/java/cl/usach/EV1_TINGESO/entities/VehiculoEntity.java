@@ -24,4 +24,5 @@ public class VehiculoEntity {
     private String anio_fabricacion;
     private String tipo_motor;
     private Integer n_asientos;
+    private Integer kilometraje;
 }

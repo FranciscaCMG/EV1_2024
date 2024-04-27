@@ -60,6 +60,7 @@ export default function Registro() {
     const [anio, setAnio] = useState("");
     const [motorVehiculo, setMotorVehiculo] = useState("");
     const [asientos, setAsientos] = useState("");
+    const [kilometraje, setKilometraje] = useState("");
 
     const [error, setError] = useState(
         {
@@ -70,6 +71,7 @@ export default function Registro() {
             errorAnio: false,
             errorMotorVehiculo: false,
             errorAsientos: false,
+            errorKilometraje: false,
             message: 'Este campo es requerido',
 
         }
@@ -78,7 +80,7 @@ export default function Registro() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!patente || !marca || !modelo || !tipoVehiculo || !anio || !motorVehiculo || !asientos) {
+        if (!patente || !marca || !modelo || !tipoVehiculo || !anio || !motorVehiculo || !asientos || !kilometraje) {
             setError({
                 ...error,
                 errorPatente: !patente,
@@ -88,6 +90,7 @@ export default function Registro() {
                 errorAnio: !anio,
                 errorMotorVehiculo: !motorVehiculo,
                 errorAsientos: !asientos,
+                errorKilometraje: !kilometraje,
             });
             setHelperText('Este campo es requerido');
         } else {
@@ -99,6 +102,7 @@ export default function Registro() {
                 errorAnio: false,
                 errorMotorVehiculo: false,
                 errorAsientos: false,
+                errorKilometraje: false,
                 message: 'Este campo es requerido',
             });
             axios.
@@ -109,12 +113,13 @@ export default function Registro() {
                     tipo_auto: tipoVehiculo,
                     anio_fabricacion: anio,
                     tipo_motor: motorVehiculo,
-                    n_asientos: asientos
+                    n_asientos: asientos,
+                    kilometraje: kilometraje
                 })
                 .then(response => {
                     console.log(response);
                 })
-            console.log(patente, marca, modelo, tipoVehiculo, anio, motorVehiculo, asientos);
+            alert('Vehículo ingresado correctamente');
 
         }
 
@@ -151,7 +156,7 @@ export default function Registro() {
                             helperText={error.errorPatente ? helperText : ''}
                             required
                             value={patente}
-                            onChange={(e) => setPatente(e.target.value)}
+                            onChange={(e) => setPatente(e.target.value.toUpperCase())}
 
                         > </TextField>
                     </Grid>
@@ -167,7 +172,7 @@ export default function Registro() {
                             helperText={error.errorMarca ? helperText : ''}
                             required
                             value={marca}
-                            onChange={(e) => setMarca(e.target.value)}
+                            onChange={(e) => setMarca(e.target.value.toUpperCase())}
                         >
                         </TextField>
                     </Grid>
@@ -181,7 +186,7 @@ export default function Registro() {
                             helperText={error.errorModelo ? helperText : ''}
                             required
                             value={modelo}
-                            onChange={(e) => setModelo(e.target.value)}
+                            onChange={(e) => setModelo(e.target.value.toUpperCase())}
 
                         > </TextField>
                     </Grid>
@@ -198,7 +203,7 @@ export default function Registro() {
                             helperText={error.errorTipoVehiculo ? helperText : ''}
                             required
                             value={tipoVehiculo}
-                            onChange={(e) => setTipoVehiculo(e.target.value)}
+                            onChange={(e) => setTipoVehiculo(e.target.value.toUpperCase())}
                         >
                             {tipo.map((option) => (
                                 <MenuItem key={option.value} value={option.value}>
@@ -217,7 +222,7 @@ export default function Registro() {
                             helperText={error.errorAnio ? helperText : ''}
                             required
                             value={anio}
-                            onChange={(e) => setAnio(e.target.value)}
+                            onChange={(e) => setAnio(e.target.value.toUpperCase())}
 
                         > </TextField>
                     </Grid>
@@ -234,7 +239,7 @@ export default function Registro() {
                             helperText={error.errorMotorVehiculo ? helperText : ''}
                             required
                             value={motorVehiculo}
-                            onChange={(e) => setMotorVehiculo(e.target.value)}
+                            onChange={(e) => setMotorVehiculo(e.target.value.toUpperCase())}
                         >
                             {motor.map((option) => (
                                 <MenuItem key={option.value} value={option.value}>
@@ -254,6 +259,20 @@ export default function Registro() {
                             required
                             value={asientos}
                             onChange={(e) => setAsientos(e.target.value)}
+
+                        > </TextField>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <h4>Kilometraje</h4>
+                        <TextField
+                            id="kilometraje"
+                            label="Ingrese el kilometraje del vehículo"
+                            fullWidth
+                            error={error.errorKilometraje}
+                            helperText={error.errorKilometraje ? helperText : ''}
+                            required
+                            value={kilometraje}
+                            onChange={(e) => setKilometraje(e.target.value)}
 
                         > </TextField>
                     </Grid>

@@ -44,4 +44,10 @@ public class TipoController {
         TipoEntity tipo = tipoService.obtenerTipoPorId(id);
         return ResponseEntity.ok(tipo);
     }
+
+    @GetMapping("/costo/{tipoMotor}/{tipoRep}")
+    public ResponseEntity<Float> findCostoByTipoMotorAndTipoRep(@PathVariable String tipoMotor, @PathVariable String tipoRep) {
+        float costo = tipoService.findCostoByTipoMotorAndTipoRep(tipoMotor, tipoRep);
+        return ResponseEntity.ok(costo);
+    }
 }

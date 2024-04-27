@@ -1,5 +1,6 @@
 package cl.usach.EV1_TINGESO.services;
 
+import cl.usach.EV1_TINGESO.entities.ReparacionEntity;
 import cl.usach.EV1_TINGESO.entities.TipoEntity;
 import cl.usach.EV1_TINGESO.repositories.TipoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,9 @@ public class TipoService {
         }
         return null;
 
+    }
+
+    public float findCostoByTipoMotorAndTipoRep(String tipoMotor, String tipoRep) {
+        return tipoRepository.findCostoByTipoMotorAndTipoRep(tipoMotor, tipoRep);
     }
 }

@@ -10,75 +10,67 @@ const columns = [
   {
     field: 'n_patente',
     headerName: 'Patente',
-    width: 130,
+    width: 150,
     editable: false,
   },
   {
     field: 'marca',
     headerName: 'Marca',
-    width: 130,
+    width: 150,
     editable: false,
   },
   {
     field: 'modelo',
     headerName: 'Modelo',
-    width: 130,
+    width: 150,
     editable: false,
   },
   {
     field: 'tipo_auto',
     headerName: 'Tipo',
     editable: false,
-    width: 130,
+    width: 150,
 
   },
   {
     field: 'anio_fabricacion',
     headerName: 'Año',
     editable: false,
-    width: 130,
+    width: 150,
 
   },
   {
     field: 'tipo_motor',
     headerName: 'Motor',
     editable: false,
-    width: 130,
+    width: 150,
 
   },
   {
     field: 'n_asientos',
     headerName: 'Asientos',
     editable: false,
-    width: 120,
+    width: 150,
 
   },
-  {
-    field: 'delete',
-    headerName: 'Delete',
-    sortable: false,
-    width: 110,
-    disableClickEventBubbling: true,
-    renderCell: () => (
-      <div>
-        <Button
-          variant='contained'
-          color="error"
-          
-        >Eliminar</Button>
-      </div>
-    ),
-  },
-
 ];
 
 export default function VehiculoCard() {
 
   const [data, setData] = useState(null);
+  const [patente, setPatente] = useState("");
 
 
-  const handleSubmit = (e) => {
-    console.log('Hay que eliminar vehiculo');
+  const handleSubmit = () => {
+    axios.delete(`http://localhost:8090/vehiculo/eliminar/${patente}`)
+      .then(response => {
+        console.log(response);
+        alert("Vehículo eliminado");
+        window.location.reload();
+      })
+      .catch(() => {
+        alert("No se pudo eliminar el vehículo");
+      });
   }
 
   useEffect(() => {
@@ -90,7 +82,7 @@ export default function VehiculoCard() {
         }));
         setData(newData);
       })
-      .catch(error => {
+      .catch(() => {
         alert("No entró a la base de datos");
       });
   }, []);
@@ -102,9 +94,8 @@ export default function VehiculoCard() {
       {data ? (
         <DataGrid
           rows={data}
-          onCellClick={handleSubmit}
+          onCellClick={data => setPatente(data.row.n_patente)}
           columns={columns}
-          
           initialState={{
             pagination: {
               paginationModel: {
@@ -113,13 +104,26 @@ export default function VehiculoCard() {
             },
           }}
           pageSizeOptions={[5]}
-           
+
         />
-        
+
       ) : (
         <div>Loading...</div>
       )}
+
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 2 }}>
+        <Button
+          variant='contained'
+          color="error"
+          onClick={handleSubmit}
+        >
+          Eliminar
+        </Button>
+      </Box>
+
     </Box>
+
+
 
   );
 }
