@@ -4,13 +4,13 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Registro from "./pages/Registro";
 import ListadoVehiculo from "./pages/ListadoVehiculo";
-import Bonos from "./pages/Bonos";
+import ListadoReparacion from "./pages/ListadoReparacion";
 import HomeIcon from '@mui/icons-material/Home';
 import NoCrashIcon from '@mui/icons-material/NoCrash';
 import Reparacion from "./pages/Reparacion";
 import ConstructionIcon from '@mui/icons-material/Construction';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
-import PercentIcon from '@mui/icons-material/Percent';
+
 
 // Links o rutas a las que se redirigirá el usuario
 const navArrayLinks = [
@@ -25,21 +25,20 @@ const navArrayLinks = [
     icon: <NoCrashIcon />
   },
   {
+    title: "Listado Vehículos",
+    path: "/listado",
+    icon: <FormatListNumberedIcon />
+  },
+  {
     title: "Reparacion",
     path: "/reparacion",
     icon: <ConstructionIcon />
   },
   {
-    title: "Listado",
-    path: "/listado",
+    title: "Listado Reparacion",
+    path: "/listado-reparacion",
     icon: <FormatListNumberedIcon />
-  },
-  {
-    title: "Bonos",
-    path: "/bonos",
-    icon: <PercentIcon />
-  },
-
+  }
 
 ]
 
@@ -65,9 +64,10 @@ export default function App() {
             path="/listado"
             element={<ListadoVehiculo />}
           />
+
           <Route
-            path="/bonos"
-            element={<Bonos />}
+            path="/listado-reparacion"
+            element={<ListadoReparacion />}
           />
 
         </Routes>

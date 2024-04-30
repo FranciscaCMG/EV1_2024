@@ -1,6 +1,8 @@
 package cl.usach.EV1_TINGESO.services;
 
+import cl.usach.EV1_TINGESO.entities.CostoEntity;
 import cl.usach.EV1_TINGESO.entities.VehRepEntity;
+import cl.usach.EV1_TINGESO.repositories.CostoRepository;
 import cl.usach.EV1_TINGESO.repositories.VehRepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,6 @@ public class VehRepService {
         return vehRep;
     }
 
-
     public VehRepEntity obtenerVehRepPorId(String id) {
         return vehRepRepository.findById(id).get();
     }
@@ -40,4 +41,7 @@ public class VehRepService {
         return null;
 
     }
+
+
+    
 }

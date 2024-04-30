@@ -22,12 +22,18 @@ public class TipoService {
         return tipoRepository.save(tipo);
     }
 
+    public  TipoEntity guardarTipoFuncion(String n_patente, Integer tipo_rep, Float monto) {
+        TipoEntity tipo = new TipoEntity();
+        tipo.setN_patente(n_patente);
+        tipo.setTipo_rep(tipo_rep);
+        tipo.setMonto(monto);
+        return tipoRepository.save(tipo);
+    }
+
     public TipoEntity eliminarTipo(TipoEntity tipo) {
         tipoRepository.delete(tipo);
         return tipo;
     }
-
-
     public TipoEntity obtenerTipoPorId(String id) {
         return tipoRepository.findById(Integer.valueOf(id)).get();
     }
@@ -42,7 +48,4 @@ public class TipoService {
 
     }
 
-    public float findCostoByTipoMotorAndTipoRep(String tipoMotor, String tipoRep) {
-        return tipoRepository.findCostoByTipoMotorAndTipoRep(tipoMotor, tipoRep);
-    }
 }

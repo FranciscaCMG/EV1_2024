@@ -27,7 +27,6 @@ public class VehiculoService {
         return vehiculo;
     }
 
-
     public VehiculoEntity obtenerVehiculoPorId(String id) {
         return vehiculoRepository.findById(id).get();
     }

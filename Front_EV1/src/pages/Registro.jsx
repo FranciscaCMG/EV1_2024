@@ -118,6 +118,7 @@ export default function Registro() {
                 })
                 .then(response => {
                     console.log(response);
+                    window.location.reload();
                 })
             alert('Vehículo ingresado correctamente');
 

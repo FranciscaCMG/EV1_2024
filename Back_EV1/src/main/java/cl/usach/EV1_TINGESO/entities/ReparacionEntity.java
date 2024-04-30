@@ -12,12 +12,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReparacionEntity {
     @Id
-    @Column(name = "n_patente", nullable = false)
-    private String n_patente;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
+    private String n_patente;
     private String fecha_ing;
     private String hora_ing;
-    private float monto_total;
+    private Float monto_total;
     private String fecha_sal;
     private String hora_sal;
     private String fecha_sal_cli;

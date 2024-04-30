@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TipoRepository extends JpaRepository<TipoEntity, Integer>{
 
-    @Query("SELECT t.costo FROM TipoEntity t WHERE t.tipo_motor = :tipoMotor AND t.tipo_rep = :tipoRep")
-    float findCostoByTipoMotorAndTipoRep(@Param("tipoMotor") String tipoMotor, @Param("tipoRep") String tipoRep);
+    //@Query("SELECT t.costo FROM TipoEntity t WHERE t.tipo_motor = :tipoMotor AND t.tipo_rep = :tipoRep")
+    //float findCostoByTipoMotorAndTipoRep(@Param("tipoMotor") String tipoMotor, @Param("tipoRep") String tipoRep);
 
 
 }

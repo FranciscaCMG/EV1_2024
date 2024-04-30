@@ -1,109 +1,125 @@
 /* eslint-disable react/prop-types */
 import Checkbox from '@mui/material/Checkbox';
 import OutboxIcon from '@mui/icons-material/Outbox';
-import CalculateIcon from '@mui/icons-material/Calculate';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import { Button, Grid, Switch, TextField } from "@mui/material";
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
 
 export default function FormReparacion(props) {
 
     const data = props.data;
-    var bonomarca = 0;
-    const [tipo1, setTipo1] = useState(false);
-    const [tipo2, setTipo2] = useState(false);
-    const [tipo3, setTipo3] = useState(false);
-    const [tipo4, setTipo4] = useState(false);
-    const [tipo5, setTipo5] = useState(false);
-    const [tipo6, setTipo6] = useState(false);
-    const [tipo7, setTipo7] = useState(false);
-    const [tipo8, setTipo8] = useState(false);
-    const [tipo9, setTipo9] = useState(false);
-    const [tipo10, setTipo10] = useState(false);
-    const [tipo11, setTipo11] = useState(false);
+    console.log("DATAAAAA props", data);
+    const [tipoArray, setTipoRep] = useState([]);
+    const [activacion, setActivacion] = useState(false);
+    const [montoTotal, setMontoTotal] = useState(0);
 
-    const bonos = [
-        {
-            id: 1,
-            marca: 'TOYOTA',
-            cantidad: 2,
-            monto: 70000
-        },
-        {
-            id: 2,
-            marca: 'FORD',
-            cantidad: 1,
-            monto: 50000
-        },
-        {
-            id: 3,
-            marca: 'HYUNDAI',
-            cantidad: 3,
-            monto: 30000
-        },
-        {
-            id: 4,
-            marca: 'HONDA',
-            cantidad: 1,
-            monto: 40000
-        }
-    ];
+    useEffect(() => {
 
-    console.log(data.n_patente);
+        let arreglo = "";
 
-    const handleChange = (event) => {
-
-        if (event.target.checked) {
-
-            if (data.marca === 'TOYOTA' && bonos[0].cantidad > 0) {
-                bonomarca = bonos[0].monto;
-                bonos[0].cantidad = bonos[0].cantidad - 1;
-            }
-            if (data.marca === 'FORD' && bonos[1].cantidad > 0) {
-                bonomarca = bonos[1].monto;
-                bonos[1].cantidad = bonos[1].cantidad - 1;
-            }
-            if (data.marca === 'HYUNDAI' && bonos[2].cantidad > 0) {
-                bonomarca = bonos[2].monto;
-                bonos[2].cantidad = bonos[2].cantidad - 1;
-            }
-            if (data.marca === 'HONDA' && bonos[3].cantidad > 0) {
-                bonomarca = bonos[3].monto;
-                bonos[3].cantidad = bonos[3].cantidad - 1;
-            }
-            console.log('Aplicar bono por marca');
-        }
-        else {
-            console.log('No aplicar bono por marca');
+        for (let i = 0; i < tipoArray.length; i++) {
+            arreglo = arreglo + tipoArray[i] + ",";
         }
 
-        //console.log(event.target.checked);
+        axios.post('http://localhost:8090/costo/total', {
+            tipo_rep: arreglo,
+            tipo_motor: data.tipo_motor,
+            kilometraje: data.kilometraje,
+            tipo_auto: data.tipo_auto,
+            anio_fabricacion: data.anio_fabricacion,
+            marca: data.marca,
+            activacion: activacion,
+            patente: data.n_patente,
+            fechaCompleta: fechaActualyHora(),
+        })
+            .then(response => {
+                console.log("DATAAAAA BOTON", response.data);
+                setMontoTotal(response.data);
+            }).catch(error => {
+                console.log(error);
+                setMontoTotal(0);
+            });
+    }, [tipoArray, activacion]);
+
+    function arrayTipo(e, tipo) {
+
+        if (e.target.checked) {
+            setTipoRep(prevArray => [...prevArray, tipo]);
+
+        } else {
+            setTipoRep(prevArray => prevArray.filter(item => item !== tipo));
+        }
     }
 
-    const handleTipo1 = (event) => {
-        setTipo1(event.target.checked);
-
-        
-        console.log('Tipo 1 uno wan');
-        console.log(event.target.checked);
+    function fechaIng(fechaCompleta) {
+        let fecha = fechaCompleta.split(",");
+        return fecha[1];
     }
+
+    function horaIng(fechaCompleta) {
+        let fecha = fechaCompleta.split(",");
+        return fecha[2];
+    }
+
+    function fechaActualyHora() {
+        var fecha = new Date();
+
+        var diaSemana = fecha.toLocaleDateString("es-CL", { weekday: 'long', timeZone: "America/Santiago" });
+        var fechaActual = fecha.toLocaleString("es-CL", { timeZone: "America/Santiago" });
+
+        // Convertir a mayúsculas y eliminar tildes
+        diaSemana = diaSemana.toUpperCase();
+        diaSemana = diaSemana.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+        return diaSemana + "," + fechaActual;
+    }
+
+    function handleSubmit(event) {
+
+        event.preventDefault();
+        var fecha = fechaActualyHora();
+        console.log("ME EJECUTE")
+
+        axios.post('http://localhost:8090/reparacion/guardar', {
+            n_patente: data.n_patente,
+            fecha_ing: fechaIng(fecha),
+            hora_ing: horaIng(fecha),
+            monto_total: montoTotal,
+            fecha_sal: null,
+            hora_sal: null,
+            fecha_sal_cli: null,
+            hora_sal_cli: null,
+        }).then(response => {
+            console.log(response);
+            alert("Reparación Ingresada Correctamente");
+        }).catch(error => {
+            console.log(error);
+        });
+
+        for (let i = 0; i < tipoArray.length; i++) {
+            console.log("entrefor");
+            axios.get(`http://localhost:8090/costo/tipo/${tipoArray[i]}/${data.tipo_motor}/${data.n_patente}`);
+        }
+    }
+
 
     return (
         <>
             <Grid container spacing={2}>
 
                 <Grid item xs={6}>
-                    <h4>Fecha Ingreso</h4>
+                    <h4>Fecha y Hora De Ingreso</h4>
                     <TextField
-
-                        id="fechaingreso"
-                        label="Ingrese la fecha de ingreso"
+                        disabled
+                        id="outlined-disabled"
+                        value={fechaActualyHora()}
+                        onClick={fechaActualyHora}
                         fullWidth
-                        required
-
                     > </TextField>
                 </Grid>
 
@@ -115,68 +131,87 @@ export default function FormReparacion(props) {
                                 value="top"
                                 control={<Checkbox />}
                                 label="1"
-                                onChange={handleTipo1}
+                                onClick={(e) => arrayTipo(e, 1)}
                                 labelPlacement="top" />
                             <FormControlLabel
                                 value="top"
                                 control={<Checkbox />}
                                 label="2"
+                                onClick={(e) => arrayTipo(e, 2)}
                                 labelPlacement="top" />
                             <FormControlLabel
                                 value="top"
                                 control={<Checkbox />}
                                 label="3"
+                                onClick={(e) => arrayTipo(e, 3)}
                                 labelPlacement="top" />
                             <FormControlLabel
                                 value="top"
                                 control={<Checkbox />}
                                 label="4"
+                                onClick={(e) => arrayTipo(e, 4)}
                                 labelPlacement="top" />
                             <FormControlLabel
                                 value="top"
                                 control={<Checkbox />}
                                 label="5"
+                                onClick={(e) => arrayTipo(e, 5)}
                                 labelPlacement="top" />
                             <FormControlLabel
                                 value="top"
                                 control={<Checkbox />}
                                 label="6"
+                                onClick={(e) => arrayTipo(e, 6)}
                                 labelPlacement="top" />
                             <FormControlLabel
                                 value="top"
                                 control={<Checkbox />}
                                 label="7"
+                                onClick={(e) => arrayTipo(e, 7)}
                                 labelPlacement="top" />
                             <FormControlLabel
                                 value="top"
                                 control={<Checkbox />}
                                 label="8"
+                                onClick={(e) => arrayTipo(e, 8)}
                                 labelPlacement="top" />
                             <FormControlLabel
                                 value="top"
                                 control={<Checkbox />}
                                 label="9"
+                                onClick={(e) => arrayTipo(e, 9)}
                                 labelPlacement="top" />
                             <FormControlLabel
                                 value="top"
                                 control={<Checkbox />}
                                 label="10"
+                                onClick={(e) => arrayTipo(e, 10)}
                                 labelPlacement="top" />
                             <FormControlLabel
                                 value="top"
                                 control={<Checkbox />}
                                 label="11"
+                                onClick={(e) => arrayTipo(e, 11)}
                                 labelPlacement="top" />
                         </FormGroup>
                     </FormControl>
 
                 </Grid>
+                <Grid item xs={6}>
+                    <h4>Monto Total</h4>
+                    <TextField
+                        disabled
+                        id="outlined-disabled"
+                        value={montoTotal}
+                        fullWidth
+                    > </TextField>
+                </Grid>
 
-                {data.marca === 'TOYOTA'|| data.marca === 'FORD' || data.marca === 'HYUNDAI' || data.marca === 'HONDA' ? <Grid item xs={6} container justifyContent="center" alignItems="center">
+                {data.marca === 'TOYOTA' || data.marca === 'FORD' || data.marca === 'HYUNDAI' || data.marca === 'HONDA' ? <Grid item xs={6} container justifyContent="center" alignItems="center">
 
                     <Typography>No</Typography>
                     <FormControlLabel
-                        onChange={handleChange}
+                        onClick={(e) => setActivacion(e.target.checked)}
                         value="top"
                         control={<Switch color="primary" />}
                         label="Aplicar Bono Por Marca"
@@ -185,25 +220,14 @@ export default function FormReparacion(props) {
                     <Typography>Si</Typography>
                 </Grid> : null}
 
-
             </Grid>
             <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Grid item>
-                    <Button
-                        startIcon={<CalculateIcon />}
-                        type="submit"
-                        variant="outlined"
-
-                        sx={{ mt: 3, mb: 2, marginLeft: 0, marginTop: 6, width: '20rem' }}
-                    >
-                        Calcular Costo
-                    </Button>
-                </Grid>
                 <Grid item>
                     <Button
                         startIcon={<OutboxIcon />}
                         type="submit"
                         variant="contained"
+                        onClick={handleSubmit}
 
                         sx={{ mt: 3, mb: 2, marginLeft: 0, marginTop: 6, width: '20rem' }}
                     >

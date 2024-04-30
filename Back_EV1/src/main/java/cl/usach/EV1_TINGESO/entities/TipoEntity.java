@@ -16,8 +16,7 @@ public class TipoEntity {
     @Column(name = "ID", nullable = false)
     private Integer ID;
 
-    private String tipo_rep;
-    private String detalle_rep;
-    private String tipo_motor;
-    private float costo;
+    private String n_patente;
+    private Integer tipo_rep;
+    private Float monto;
 }

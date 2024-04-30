@@ -1,5 +1,6 @@
 package cl.usach.EV1_TINGESO.controllers;
 
+import cl.usach.EV1_TINGESO.entities.CostoEntity;
 import cl.usach.EV1_TINGESO.entities.VehRepEntity;
 import cl.usach.EV1_TINGESO.services.VehRepService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,4 +45,9 @@ public class VehRepController {
         VehRepEntity vehRep = vehRepService.obtenerVehRepPorId(id);
         return ResponseEntity.ok(vehRep);
     }
+
+
+
+
+
 }
